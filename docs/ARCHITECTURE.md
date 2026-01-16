@@ -36,8 +36,8 @@ Note: The History component should not align with the very top of the Prompt Edi
 |                         | Title: Prompt Engine    |  |
 |                         | Subtitle description    |  |
 |                         | [Copy] [Reset]          |  |
-|                         +-------------------------+  |
-|  |-------------------|  |                         |  |
+|  |-------------------|  +-------------------------+  |
+|  |                   |  |                         |  |
 |  |    History        |  |                         |  |
 |  |    (Top aligned   |  |     Prompt Editor       |  |
 |  |     with this     |  |     Template Area       |  |

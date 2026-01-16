@@ -40,3 +40,184 @@
 .read-the-docs {
   color: #888;
 }
+
+/* App specific styles for Prompt Engine design */
+.app-root {
+  min-height: 100vh;
+  background: #000; /* simple dark background */
+  color: #fff;
+  padding: 48px;
+  box-sizing: border-box;
+}
+
+.main-layout {
+  display: flex;
+  justify-content: center;
+  margin-top: 64px;
+}
+
+.main-layout.single {
+  justify-content: center;
+}
+
+.editor-area {
+  max-width: 820px;
+  width: 100%;
+}
+
+.editor-root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.editor-header {
+  text-align: left;
+  margin-bottom: 20px;
+  width: 100%;
+}
+.title {
+  font-size: 48px;
+  margin: 0 0 8px 0;
+}
+.subtitle {
+  color: #b3b3b3;
+  margin: 0 0 12px 0;
+  font-size: 18px;
+}
+.action-bar {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-start;
+  margin-top: 12px;
+}
+.btn {
+  padding: 10px 20px;
+  border-radius: 28px;
+  font-weight: 600;
+}
+.btn-primary {
+  background: #1db954;
+  color: white;
+  border: none;
+}
+.btn-ghost {
+  background: transparent;
+  color: #bdbdbd;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.editor-card {
+  background: transparent; /* remove layered card look */
+  padding: 32px 8px; /* less card padding, more focus on text */
+  border-radius: 0;
+  width: 100%;
+}
+
+.prompt-text {
+  font-size: 24px;
+  line-height: 1.5;
+  color: #fff;
+  display: block;
+  text-align: left;
+}
+.prompt-text {
+  display: block;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-weight: 700; /* big fat font */
+  font-size: 40px; /* large lyric-like text */
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+.section-inline {
+  display: block; /* each sentence on its own line */
+  margin: 10px 0;
+}
+
+.field-wrapper {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  position: relative;
+}
+.placeholder {
+  color: rgba(128,128,128,0.5);
+  font-style: italic;
+  pointer-events: none;
+}
+.inline-field {
+  min-width: 40px; /* ensure some width when empty */
+}
+.section-block {
+  margin: 10px 0;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+.section-block .fixed-text {
+  display: inline-block;
+  color: rgba(255,255,255,0.9);
+}
+.section-block .inline-field {
+  display: inline-block;
+  position: relative;
+  padding: 0;
+  margin: 0 6px;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: rgba(255,255,255,0.95);
+  font-style: italic;
+  font-weight: 700; /* match static text boldness */
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-width: 100%;
+  transition: color 120ms ease;
+}
+.section-block .inline-field[data-empty='true']::before,
+.section-block .inline-field[contenteditable]:empty::before {
+  /* render placeholder inline so it sets the natural width of the empty field */
+  content: attr(data-placeholder);
+  color: rgba(128,128,128,0.5);
+  font-style: italic;
+  display: inline-block;
+  margin-right: 6px;
+  pointer-events: none;
+  white-space: pre-wrap;
+}
+
+/* underline effect: a 5px accent underline that appears on hover/focus */
+.section-block .inline-field::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 5px;
+  background: #1db954;
+  border-radius: 3px;
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition: transform 140ms ease;
+}
+.section-block .inline-field:hover::after,
+.section-block .inline-field:focus::after,
+.section-block .inline-field:focus-visible::after {
+  transform: scaleX(1);
+}
+.fixed-text {
+  opacity: 0.9;
+  margin: 0 4px;
+}
+
+.toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255,255,255,0.08);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+}
