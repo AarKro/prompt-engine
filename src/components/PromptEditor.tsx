@@ -60,7 +60,7 @@ const SECTIONS: Array<{
 	}
 ]
 
-export default function PromptEditor() {
+export default function PromptEditor({ onSaveHistory, templateRef }: { onSaveHistory?: (text: string, fields?: Record<string,string>) => void; templateRef?: React.RefObject<HTMLDivElement | null> }) {
 	const [fields, setFields] = useState<Record<FieldId, { value: string; modified: boolean }>>(() => {
 		const obj = {} as Record<FieldId, { value: string; modified: boolean }>
 		;(Object.keys(FIELD_PLACEHOLDERS) as FieldId[]).forEach((k) => {
@@ -112,6 +112,34 @@ export default function PromptEditor() {
 		}
 		window.addEventListener('keydown', onKey)
 		return () => window.removeEventListener('keydown', onKey)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [fields])
+
+	useEffect(() => {
+		const onHistoryLoad = (ev: Event) => {
+			const detail = (ev as CustomEvent).detail as any
+			if (!detail) return
+			if (detail.fields) {
+				Object.entries(detail.fields).forEach(([k, v]) => {
+					const el = fieldRefs.current[k as FieldId]
+					if (el) {
+						el.innerText = v as string
+						el.dataset.empty = (v as string).trim().length === 0 ? 'true' : 'false'
+						setFields((s) => ({ ...s, [k]: { value: v as string, modified: (v as string).trim().length > 0 } }))
+					}
+				})
+				return
+			}
+			const firstKey = Object.keys(fields)[0] as FieldId
+			const el = fieldRefs.current[firstKey]
+			if (el) {
+				el.innerText = detail.text || ''
+				el.dataset.empty = (detail.text || '').trim().length === 0 ? 'true' : 'false'
+				setFields((s) => ({ ...s, [firstKey]: { value: detail.text || '', modified: (detail.text || '').trim().length > 0 } }))
+			}
+		}
+		window.addEventListener('history:load', onHistoryLoad as EventListener)
+		return () => window.removeEventListener('history:load', onHistoryLoad as EventListener)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [fields])
 
@@ -178,6 +206,8 @@ export default function PromptEditor() {
 			await navigator.clipboard.writeText(text)
 			setToast('Copied to clipboard')
 			setTimeout(() => setToast(null), 1500)
+			// save to history if handler provided
+			if (onSaveHistory) onSaveHistory(text, Object.fromEntries(Object.entries(fields).map(([k,v])=>[k, v.value])))
 			} catch {
 				setToast('Copy failed')
 				setTimeout(() => setToast(null), 1800)
@@ -215,7 +245,7 @@ export default function PromptEditor() {
 			</div>
 
 			<div className="editor-card" role="region" aria-label="Prompt template editor">
-						<div className="prompt-text">
+						<div ref={templateRef} className="prompt-text">
 							{SECTIONS.map((section) => (
 								<span key={section.id} className="section-inline">
 									{section.tokens.map((t, ti) => {
