@@ -17,7 +17,6 @@ export default function App() {
   const [history, setHistory] = useState<HistoryEntry[]>(initialHistory)
   const historyRef = useRef<HTMLDivElement | null>(null)
   const templateRef = useRef<HTMLDivElement | null>(null)
-  const [historyTopOffset, setHistoryTopOffset] = useState<number>(0)
 
   // measure and align history top with the template area
   useEffect(() => {
